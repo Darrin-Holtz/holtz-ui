@@ -1,7 +1,10 @@
+import { Hero } from "./components/sections/Hero";
+import { defaultTokens } from "@/lib/tokens";
+
 export default function Home() {
   return (
-    <div>
-      <h1>Hello from the index page</h1>
-    </div>
+    <main className="flex-1">
+      <Hero tokens={defaultTokens} />
+    </main>
   );
 }
