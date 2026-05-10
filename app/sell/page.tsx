@@ -3,6 +3,7 @@ import { SellForm } from "../components/form/Sellform";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/db";
+import { unstable_noStore as noStore } from "next/cache";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +25,7 @@ async function getData(userId: string) {
 }
 
 export default async function SellPage() {
+  noStore();
   const {getUser} = getKindeServerSession();
   const user = await getUser();
   if (!user) {
