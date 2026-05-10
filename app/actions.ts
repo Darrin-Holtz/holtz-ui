@@ -159,11 +159,11 @@ export async function BuyProduct(formData: FormData) {
     success_url:
       process.env.NODE_ENV === "development"
         ? "https://musical-space-guacamole-jjrjxgp465w4h5vq6-3000.app.github.dev/payment/success"
-        : "https://marshal-ui-yt.vercel.app/payment/success",
+        : "https://holtz-ui.vercel.app/payment/success",
     cancel_url:
       process.env.NODE_ENV === "development"
         ? "https://musical-space-guacamole-jjrjxgp465w4h5vq6-3000.app.github.dev/payment/cancel"
-        : "https://marshal-ui-yt.vercel.app/payment/cancel",
+        : "https://holtz-ui.vercel.app/payment/cancel",
   });
 
   return redirect(session.url as string);
@@ -192,11 +192,11 @@ export async function CreateStripeAccountLink() {
     refresh_url:
       process.env.NODE_ENV === "development"
         ? `https://musical-space-guacamole-jjrjxgp465w4h5vq6-3000.app.github.dev/billing`
-        : `https://marshal-ui-yt.vercel.app/billing`,
+        : `https://holtz-ui.vercel.app/billing`,
     return_url:
       process.env.NODE_ENV === "development"
         ? `https://musical-space-guacamole-jjrjxgp465w4h5vq6-3000.app.github.dev/return/${data?.connectedAccountId}`
-        : `https://marshal-ui-yt.vercel.app/return/${data?.connectedAccountId}`,
+        : `https://holtz-ui.vercel.app/return/${data?.connectedAccountId}`,
     type: "account_onboarding",
   });
 
