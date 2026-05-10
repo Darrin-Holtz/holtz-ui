@@ -101,19 +101,21 @@ export async function UpdateUserSettings(prevState: any, formData: FormData) {
 }
 
 export async function BuyProduct(formData: FormData) {
+  const id = formData.get("id") as string;
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
   if (!user) {
-    redirect("/api/auth/login");
+    const returnTo = `/product/${id}?checkout=1`;
+    redirect(`/api/auth/login?post_login_redirect_url=${encodeURIComponent(returnTo)}`);
   }
 
-  const id = formData.get("id") as string;
   const data = await prisma.product.findUnique({
     where: {
       id: id,
     },
     select: {
+      userId: true,
       name: true,
       smallDescription: true,
       price: true,
@@ -129,7 +131,11 @@ export async function BuyProduct(formData: FormData) {
   });
 
   if (!data) {
-    throw new Error("Product not found");
+    redirect(`/product/${id}?error=product_not_found`);
+  }
+
+  if (data.userId && data.userId === user.id) {
+    redirect(`/product/${id}?error=self_purchase`);
   }
 
   const amountInCents = Math.round(Number(data.price.toString()) * 100);

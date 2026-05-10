@@ -15,6 +15,11 @@ export async function proxy(request: NextRequest) {
     {
       publicPaths: [
         "/",
+        "/generator",
+        "/product",
+        "/product/*",
+        "/products",
+        "/products/*",
         "/api/uploadthing",
         "/api/uploadthing/*",
         "/api/stripe/connect",

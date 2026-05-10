@@ -1,4 +1,6 @@
 import { ProductDescription } from "@/app/components/ProductDescription";
+import { ProductAutoCheckout } from "@/app/components/ProductAutoCheckout";
+import { ProductPurchaseToast } from "@/app/components/ProductPurchaseToast";
 import { BuyButton } from "@/app/components/SubmitButtons";
 import prisma from "@/lib/db";
 import { Button } from "@/components/ui/button";
@@ -61,6 +63,8 @@ export default async function ProductPage({
 
   return (
     <section className="mx-auto px-4 lg:mt-10 w-full max-w-7xl lg:px-8 lg:grid lg:grid-rows-1 lg:grid-cols-7 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16">
+      <ProductPurchaseToast />
+      <ProductAutoCheckout formId="product-buy-form" />
       <Carousel className=" lg:row-end-1 lg:col-span-4">
         <CarouselContent>
           {data?.images.map((item, index) => (
@@ -88,7 +92,7 @@ export default async function ProductPage({
         </h1>
 
         <p className="mt-2 text-muted-foreground">{data?.smallDescription}</p>
-        <form action={BuyProduct}>
+        <form id="product-buy-form" action={BuyProduct}>
           <input type="hidden" name="id" value={data?.id} />
           <BuyButton price={data?.price.toString()} />
         </form>
