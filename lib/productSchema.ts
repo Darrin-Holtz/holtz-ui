@@ -8,6 +8,9 @@ type RichTextNode = {
 const extractText = (node: RichTextNode): string =>
   [node.text ?? "", ...(node.content ?? []).map(extractText)].join(" ");
 
+const looksLikeAbsoluteUrl = (value: string) =>
+  value.startsWith("http://") || value.startsWith("https://");
+
 export const productSchema = z.object({
   name: z
     .string()
@@ -33,7 +36,11 @@ export const productSchema = z.object({
   images: z.array(z.string()).min(1, "At least one image is required"),
   productFile: z
     .string()
-    .min(1, { message: "Pleaes upload a zip of your product" }),
+    .min(1, { message: "Pleaes upload a zip of your product" })
+    .refine(
+      (value) => !looksLikeAbsoluteUrl(value),
+      "Product file must be a secure upload key. Please re-upload your file."
+    ),
 });
 
 export const userSettingsSchema = z.object({

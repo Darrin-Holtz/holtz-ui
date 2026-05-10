@@ -1,6 +1,8 @@
 import type { CSSProperties } from "react";
 
 export default function ProductEmail({ link }: { link: string }) {
+  const safeLink = link?.trim();
+
   return (
     <html>
       <head>
@@ -11,10 +13,14 @@ export default function ProductEmail({ link }: { link: string }) {
           <p style={headingStyle}>Hi Friend,</p>
           <p style={paragraphStyle}>Thank you for buying your product at HoltzUI</p>
           <div style={buttonWrapStyle}>
-            <a href={link} style={buttonStyle}>
+            <a href={safeLink} style={buttonStyle} target="_blank" rel="noopener noreferrer">
               Your Download Link
             </a>
           </div>
+          <p style={paragraphStyle}>
+            If the button does not work, copy and paste this URL into your browser:
+          </p>
+          <p style={urlStyle}>{safeLink}</p>
           <p style={paragraphStyle}>
             Best,
             <br />
@@ -64,4 +70,12 @@ const buttonStyle: CSSProperties = {
   borderRadius: "8px",
   textDecoration: "none",
   fontWeight: 600,
+};
+
+const urlStyle: CSSProperties = {
+  color: "#1d4ed8",
+  fontSize: "14px",
+  lineHeight: "20px",
+  margin: "0 0 16px",
+  wordBreak: "break-all",
 };

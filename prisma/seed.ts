@@ -2,6 +2,7 @@ import prisma from "../lib/db";
 
 async function main() {
   // Clear existing data
+  await prisma.purchase.deleteMany();
   await prisma.product.deleteMany();
   await prisma.user.deleteMany();
 

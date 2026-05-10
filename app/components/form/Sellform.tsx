@@ -156,7 +156,7 @@ export function SellForm() {
                 config={{ mode: "auto" }}
                 onClientUploadComplete={(result) => {
                   setProductFileUploadError(null);
-                  setProductFile(result[0]?.ufsUrl ?? "");
+                  setProductFile(result[0]?.key ?? "");
                   setProductFileName(result[0]?.name ?? null);
                   toast.success("Product file uploaded successfully!");
                 }}

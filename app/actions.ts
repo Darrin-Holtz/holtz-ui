@@ -101,6 +101,13 @@ export async function UpdateUserSettings(prevState: any, formData: FormData) {
 }
 
 export async function BuyProduct(formData: FormData) {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  if (!user) {
+    redirect("/api/auth/login");
+  }
+
   const id = formData.get("id") as string;
   const data = await prisma.product.findUnique({
     where: {
@@ -149,8 +156,10 @@ export async function BuyProduct(formData: FormData) {
       },
     ],
     metadata: {
-      link: data.productFile,
+      productId: id,
+      buyerId: user.id,
     },
+    customer_email: user.email ?? undefined,
     success_url:
       process.env.NODE_ENV === "development"
         ? "https://musical-space-guacamole-jjrjxgp465w4h5vq6-3000.app.github.dev/payment/success"

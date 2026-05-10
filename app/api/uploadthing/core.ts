@@ -33,7 +33,13 @@ export const ourFileRouter = {
     }),
 
   productFileUpload: f(
-    { "application/zip": { maxFileCount: 1 } },
+    {
+      "application/zip": {
+        maxFileCount: 1,
+        contentDisposition: "attachment",
+        acl: "private",
+      },
+    },
     { awaitServerData: false }
   )
     // Set permissions and file types for this FileRoute
@@ -54,7 +60,7 @@ export const ourFileRouter = {
       console.log("file url", file.url);
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { uploadedBy: metadata.userId };
+      return { uploadedBy: metadata.userId, fileKey: file.key };
     }),
 } satisfies FileRouter;
 
