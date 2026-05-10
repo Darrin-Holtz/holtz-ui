@@ -1,6 +1,5 @@
 import ProductEmail from "@/app/components/ProductEmail";
 import { stripe } from "@/lib/stripe";
-import { getMaxListeners } from "events";
 
 import { headers } from "next/headers";
 import { Resend } from "resend";
@@ -10,7 +9,19 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function POST(req: Request) {
   const body = await req.text();
 
-  const signature = (await headers()).get("Stripe-Signature") as string;
+  const signature = (await headers()).get("Stripe-Signature");
+  const webhookSecret =
+    process.env.STRIPE_SECRET_WEBHOOK ?? process.env.STRIPE_WEBHOOK_SECRET;
+
+  if (!signature) {
+    console.error("Stripe webhook missing Stripe-Signature header");
+    return new Response("missing stripe signature", { status: 400 });
+  }
+
+  if (!webhookSecret) {
+    console.error("Stripe webhook secret is not configured");
+    return new Response("webhook secret not configured", { status: 500 });
+  }
 
   let event;
 
@@ -18,10 +29,11 @@ export async function POST(req: Request) {
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_SECRET_WEBHOOK as string
+      webhookSecret
     );
   } catch (error: unknown) {
-    return new Response("webhook error", { status: 400 });
+    console.error("Stripe webhook verification failed", error);
+    return new Response("webhook verification failed", { status: 400 });
   }
 
   switch (event.type) {
