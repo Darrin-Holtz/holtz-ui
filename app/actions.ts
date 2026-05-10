@@ -115,6 +115,7 @@ export async function BuyProduct(formData: FormData) {
       User: {
         select: {
           connectedAccountId: true,
+          stripeConnectedLinked: true,
         },
       },
     },
@@ -126,12 +127,12 @@ export async function BuyProduct(formData: FormData) {
 
   const amountInCents = Math.round(Number(data.price.toString()) * 100);
   const destinationAccountId = data.User?.connectedAccountId;
+  const shouldUseConnectTransfer =
+    Boolean(destinationAccountId) &&
+    destinationAccountId!.startsWith("acct_") &&
+    data.User?.stripeConnectedLinked === true;
 
-  if (!destinationAccountId) {
-    throw new Error("Seller payout account is not connected");
-  }
-
-  const session = await stripe.checkout.sessions.create({
+  const sessionPayload: Parameters<typeof stripe.checkout.sessions.create>[0] = {
     mode: "payment",
     line_items: [
       {
@@ -150,12 +151,6 @@ export async function BuyProduct(formData: FormData) {
     metadata: {
       link: data.productFile,
     },
-    payment_intent_data: {
-      application_fee_amount: Math.round(amountInCents * 0.1),
-      transfer_data: {
-        destination: destinationAccountId,
-      },
-    },
     success_url:
       process.env.NODE_ENV === "development"
         ? "https://musical-space-guacamole-jjrjxgp465w4h5vq6-3000.app.github.dev/payment/success"
@@ -164,7 +159,18 @@ export async function BuyProduct(formData: FormData) {
       process.env.NODE_ENV === "development"
         ? "https://musical-space-guacamole-jjrjxgp465w4h5vq6-3000.app.github.dev/payment/cancel"
         : "https://holtz-ui.vercel.app/payment/cancel",
-  });
+  };
+
+  if (shouldUseConnectTransfer) {
+    sessionPayload.payment_intent_data = {
+      application_fee_amount: Math.round(amountInCents * 0.1),
+      transfer_data: {
+        destination: destinationAccountId!,
+      },
+    };
+  }
+
+  const session = await stripe.checkout.sessions.create(sessionPayload);
 
   return redirect(session.url as string);
 }

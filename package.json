@@ -7,13 +7,14 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
+    "email:dev": "email dev --dir ./emails --port 3001",
+    "email:export": "email export --dir ./emails",
     "postinstall": "prisma generate"
   },
   "dependencies": {
     "@kinde-oss/kinde-auth-nextjs": "^2.12.1",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
-    "@react-email/components": "^1.0.12",
     "@supabase/supabase-js": "^2.105.4",
     "@tiptap/core": "^3.22.5",
     "@tiptap/pm": "^3.22.5",
@@ -34,7 +35,8 @@
     "radix-ui": "^1.4.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "shadcn": "^4.7.0",
+    "react-email": "6.1.1",
+    "resend": "^6.12.3",
     "sonner": "^2.0.7",
     "stripe": "^22.1.1",
     "tailwind-merge": "^3.5.0",
@@ -51,6 +53,7 @@
     ]
   },
   "devDependencies": {
+    "@react-email/ui": "6.1.1",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/postcss": "^4",
     "@tailwindcss/typography": "^0.5.19",
@@ -61,6 +64,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

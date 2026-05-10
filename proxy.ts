@@ -12,7 +12,16 @@ export async function proxy(request: NextRequest) {
 
   return (withAuth as any)(
     async function proxy() {},
-    { publicPaths: ["/", "/api/uploadthing", "/api/uploadthing/*", "/api/stripe/connect"] }
+    {
+      publicPaths: [
+        "/",
+        "/api/uploadthing",
+        "/api/uploadthing/*",
+        "/api/stripe/connect",
+        "/api/stripe",
+        "/api/stripe/*",
+      ],
+    }
   )(request);
 }
 

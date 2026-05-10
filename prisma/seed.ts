@@ -1,4 +1,4 @@
-import prisma from "@/lib/db";
+import prisma from "../lib/db";
 
 async function main() {
   // Clear existing data
@@ -29,7 +29,7 @@ async function main() {
         images: [
           "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&h=500&fit=crop",
         ],
-        productFile: "dashboard-template.zip",
+        productFile: "https://github.com/github/gitignore/archive/refs/heads/main.zip",
         Category: "templates",
         userId: user.id,
       },
@@ -42,7 +42,7 @@ async function main() {
         images: [
           "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=500&h=500&fit=crop",
         ],
-        productFile: "ui-kit.figma",
+        productFile: "https://github.com/tailwindlabs/tailwindcss/archive/refs/heads/master.zip",
         Category: "uikits",
         userId: user.id,
       },
@@ -55,7 +55,7 @@ async function main() {
         images: [
           "https://images.unsplash.com/photo-1563062810-e5f9a2ddb62c?w=500&h=500&fit=crop",
         ],
-        productFile: "icons.zip",
+        productFile: "https://github.com/vercel/next.js/archive/refs/heads/canary.zip",
         Category: "icons",
         userId: user.id,
       },

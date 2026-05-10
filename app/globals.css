@@ -2,7 +2,6 @@
 @import "uploadthing/tw/v4";
 @source "../node_modules/@uploadthing/react/dist";
 @import "tw-animate-css";
-@import "shadcn/tailwind.css";
 @plugin "@tailwindcss/aspect-ratio";
 @plugin "@tailwindcss/typography";
 
@@ -59,7 +58,7 @@
     --card-foreground: oklch(0.145 0 0);
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.491 0.27 292.581);
+    --primary: #7008e7;
     --primary-foreground: oklch(0.969 0.016 293.756);
     --secondary: oklch(0.967 0.001 286.375);
     --secondary-foreground: oklch(0.21 0.006 285.885);
