@@ -13,6 +13,7 @@ async function main() {
       firstName: "Test",
       lastName: "User",
       profileImage: "https://via.placeholder.com/150",
+      connectedAccountId: "acct_seed_test_user_1",
     },
   });
 
