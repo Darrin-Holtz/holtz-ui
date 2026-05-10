@@ -11,19 +11,19 @@ interface iAppProps {
 export const categoryItems: iAppProps[] = [
   {
     id: 0,
-    name: "template",
+    name: "templates",
     title: "Template",
     image: <Globe />,
   },
   {
     id: 1,
-    name: "uikit",
+    name: "uikits",
     title: "Ui Kit",
     image: <ChefHat />,
   },
   {
     id: 2,
-    name: "icon",
+    name: "icons",
     title: "Icon",
     image: <PartyPopper />,
   },

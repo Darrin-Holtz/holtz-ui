@@ -5,6 +5,7 @@ import { Navbar } from "./components/Navbar";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "./api/uploadthing/core";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,6 +15,7 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -34,7 +36,8 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <Navbar />
-        {children}       
+        {children}
+        <Toaster richColors theme="light" closeButton />
       </body>
     </html>
   );

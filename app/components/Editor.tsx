@@ -1,13 +1,14 @@
 "use client";
 
 import * as React from "react";
+import type { JSONContent } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import { EditorContent, useEditor } from "@tiptap/react";
 
 type EditorProps = {
   name?: string;
   initialContent?: string;
-  onChange?: (html: string) => void;
+  onChange?: (json: string) => void;
 };
 
 type ToolbarButton = {
@@ -23,7 +24,7 @@ export default function TipTapEditor({
   initialContent = "<p></p>",
   onChange,
 }: EditorProps) {
-  const [htmlValue, setHtmlValue] = React.useState(initialContent);
+  const [jsonValue, setJsonValue] = React.useState("");
 
   const editor = useEditor({
     extensions: [StarterKit],
@@ -35,10 +36,14 @@ export default function TipTapEditor({
           "prose prose-sm sm:prose-base max-w-none dark:prose-invert prose-headings:font-semibold prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl min-h-40 rounded-md border border-input bg-transparent px-3 py-2 outline-none",
       },
     },
+    onCreate({ editor: activeEditor }) {
+      const nextJson = JSON.stringify(activeEditor.getJSON() as JSONContent);
+      setJsonValue(nextJson);
+    },
     onUpdate({ editor: activeEditor }) {
-      const nextHtml = activeEditor.getHTML();
-      setHtmlValue(nextHtml);
-      onChange?.(nextHtml);
+      const nextJson = JSON.stringify(activeEditor.getJSON() as JSONContent);
+      setJsonValue(nextJson);
+      onChange?.(nextJson);
     },
   });
 
@@ -122,7 +127,7 @@ export default function TipTapEditor({
       ? React.createElement("input", {
           type: "hidden",
           name,
-          value: htmlValue,
+          value: jsonValue,
         })
       : null,
     React.createElement("div", { className: "w-full space-y-2" },

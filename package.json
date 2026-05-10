@@ -10,26 +10,46 @@
   },
   "dependencies": {
     "@kinde-oss/kinde-auth-nextjs": "^2.12.1",
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "@supabase/supabase-js": "^2.105.4",
     "@tiptap/core": "^3.22.5",
     "@tiptap/pm": "^3.22.5",
     "@tiptap/react": "^3.22.5",
     "@tiptap/starter-kit": "^3.22.5",
+    "@types/pg": "^8.20.0",
     "@uploadthing/react": "^7.3.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "embla-carousel-react": "^8.6.0",
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",
     "lucide-react": "^1.14.0",
     "next": "16.2.4",
+    "next-themes": "^0.4.6",
+    "pg": "^8.20.0",
+    "prisma": "^7.8.0",
     "radix-ui": "^1.4.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "shadcn": "^4.7.0",
+    "sonner": "^2.0.7",
+    "stripe": "^22.1.1",
     "tailwind-merge": "^3.5.0",
     "tw-animate-css": "^1.4.0",
-    "uploadthing": "^7.7.4"
+    "uploadthing": "^7.7.4",
+    "zod": "^4.4.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/engines",
+      "prisma",
+      "msgpackr-extract",
+      "msw"
+    ]
   },
   "devDependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/postcss": "^4",
     "@tailwindcss/typography": "^0.5.19",
     "@types/file-saver": "^2.0.7",

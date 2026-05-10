@@ -1,10 +1,21 @@
-import { Hero } from "./components/sections/Hero";
-import { defaultTokens } from "@/lib/tokens";
+import { ProductRow } from "./components/ProductRow";
 
 export default function Home() {
   return (
-    <main className="flex-1">
-      <Hero tokens={defaultTokens} />
-    </main>
+    <section className="w-full max-w-7xl mx-auto px-4 md:px-8 mb-24">
+      <div className="max-w-3xl mx-auto text-2xl sm:text-5xl lg:text-6xl font-semibold text-center">
+        <h1>Find the best Tailwind</h1>
+        <h1 className="text-primary">Templates & Icons</h1>
+        <p className="lg:text-lg text-muted-foreground mx-auto mt-5 w-[90%] font-normal text-base">
+          HoltzUi stands out as the premier marketplace for all things related
+          to tailwindcss, offering an unparalleled platform for both sellers and
+          buyers alike.
+        </p>
+      </div>
+      <ProductRow category="newest"/>
+      <ProductRow category="templates"/>
+      <ProductRow category="uikits"/>
+      <ProductRow category="icons"/>
+    </section>
   );
 }
