@@ -1,38 +1,12 @@
 import ProductEmail from "@/app/components/ProductEmail";
 import prisma from "@/lib/db";
 import { stripe } from "@/lib/stripe";
+import { getAppUrl } from "@/lib/appUrl";
 
 import { headers } from "next/headers";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-
-function normalizeBaseUrl(rawValue: string | undefined) {
-  if (!rawValue) return null;
-
-  let value = rawValue.trim();
-  if (!value) return null;
-
-  if (!/^https?:\/\//i.test(value)) {
-    value = `https://${value}`;
-  }
-
-  try {
-    const url = new URL(value);
-    return `${url.protocol}//${url.host}`;
-  } catch {
-    return null;
-  }
-}
-
-function getAppUrl() {
-  return (
-    normalizeBaseUrl(process.env.NEXT_PUBLIC_APP_URL) ??
-    normalizeBaseUrl(process.env.APP_URL) ??
-    normalizeBaseUrl(process.env.VERCEL_URL) ??
-    "http://localhost:3000"
-  );
-}
 
 function buildDownloadLink(purchaseId: string) {
   const appUrl = getAppUrl();

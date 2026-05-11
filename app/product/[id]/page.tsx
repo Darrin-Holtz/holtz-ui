@@ -17,6 +17,7 @@ import {
 import { JSONContent } from "@tiptap/react";
 import Image from "next/image";
 import { BuyProduct } from "@/app/actions";
+import { repairDescription } from "@/lib/repairDescription";
 
 async function getData(id: string) {
   const data = await prisma.product.findUnique({
@@ -120,7 +121,7 @@ export default async function ProductPage({
       </div>
 
       <div className="w-full max-w-2xl mx-auto mt-16 lg:max-w-none lg:mt-0 lg:col-span-4">
-        <ProductDescription content={data?.description as JSONContent} />
+        <ProductDescription content={repairDescription(data?.description) as JSONContent} />
       </div>
     </section>
   );

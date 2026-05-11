@@ -47,7 +47,10 @@ export function UserNav({ email, name, userImage }: iAppProps) {
             <Link href="/settings">Settings</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href="my-products">My Products</Link>
+            <Link href="/my-products">My Products</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href="/my-purchases">My Purchases</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="/billing">Billing</Link>

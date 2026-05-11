@@ -34,11 +34,9 @@ export const ourFileRouter = {
 
   productFileUpload: f(
     {
-      "application/zip": {
-        maxFileCount: 1,
-        contentDisposition: "attachment",
-        acl: "private",
-      },
+      // Accept binary uploads — browsers label zip inconsistently
+      // (application/zip, x-zip-compressed, octet-stream, etc).
+      blob: { maxFileSize: "64MB", maxFileCount: 1 },
     },
     { awaitServerData: false }
   )

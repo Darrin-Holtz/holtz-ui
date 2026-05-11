@@ -17,7 +17,7 @@ async function getData(userId: string) {
     },
   });
 
-  if (data?.stripeConnectedLinked === false) {
+  if (!data?.stripeConnectedLinked) {
     return redirect("/billing");
   }
 

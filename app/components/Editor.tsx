@@ -7,7 +7,8 @@ import { EditorContent, useEditor } from "@tiptap/react";
 
 type EditorProps = {
   name?: string;
-  initialContent?: string;
+  // Accept either an HTML string or a parsed TipTap JSONContent object.
+  initialContent?: string | object;
   onChange?: (json: string) => void;
 };
 
@@ -26,9 +27,28 @@ export default function TipTapEditor({
 }: EditorProps) {
   const [jsonValue, setJsonValue] = React.useState("");
 
+  // Normalize initialContent so TipTap always receives either a proper
+  // JSONContent object or an HTML string — never a bare JSON string.
+  // A bare JSON string is treated as HTML by TipTap, which wraps the entire
+  // JSON text in a paragraph node (the double-serialization bug).
+  const resolvedContent = React.useMemo((): JSONContent | string => {
+    if (typeof initialContent === "object" && initialContent !== null) {
+      return initialContent as JSONContent;
+    }
+    if (typeof initialContent === "string" && initialContent.trimStart().startsWith("{")) {
+      try {
+        return JSON.parse(initialContent) as JSONContent;
+      } catch {
+        // Not valid JSON — fall through and let TipTap handle as HTML.
+      }
+    }
+    return initialContent as string;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // only resolve once on mount; prop changes do not re-init the editor
+
   const editor = useEditor({
     extensions: [StarterKit],
-    content: initialContent,
+    content: resolvedContent,
     immediatelyRender: false,
     editorProps: {
       attributes: {

@@ -43,6 +43,22 @@ export const productSchema = z.object({
     ),
 });
 
+// For edits the product file may be kept unchanged, so we allow an existing key.
+export const updateProductSchema = productSchema.extend({
+  productFile: z
+    .string()
+    .min(1, { message: "Please upload a zip of your product" }),
+});
+
+export function getUpdateProductFormValues(formData: FormData) {
+  const base = getProductFormValues(formData);
+  return {
+    ...base,
+    // On edit the hidden field may already hold the saved key — allow it through.
+    productFile: formData.get("productFile"),
+  };
+}
+
 export const userSettingsSchema = z.object({
   firstName: z
     .string()

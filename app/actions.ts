@@ -3,9 +3,13 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { z } from "zod";
 import {
   getProductFormValues,
+  getUpdateProductFormValues,
   productSchema,
+  updateProductSchema,
   userSettingsSchema,
 } from "@/lib/productSchema";
+import { repairDescription } from "@/lib/repairDescription";
+import { getAppUrl } from "@/lib/appUrl";
 import prisma from "@/lib/db";
 import { type CategoryTypes } from "@/lib/generated/prisma/enums";
 import { revalidatePath } from "next/cache";
@@ -166,14 +170,8 @@ export async function BuyProduct(formData: FormData) {
       buyerId: user.id,
     },
     customer_email: user.email ?? undefined,
-    success_url:
-      process.env.NODE_ENV === "development"
-        ? "https://musical-space-guacamole-jjrjxgp465w4h5vq6-3000.app.github.dev/payment/success"
-        : "https://holtz-ui.vercel.app/payment/success",
-    cancel_url:
-      process.env.NODE_ENV === "development"
-        ? "https://musical-space-guacamole-jjrjxgp465w4h5vq6-3000.app.github.dev/payment/cancel"
-        : "https://holtz-ui.vercel.app/payment/cancel",
+    success_url: `${getAppUrl()}/payment/success`,
+    cancel_url: `${getAppUrl()}/payment/cancel`,
   };
 
   if (shouldUseConnectTransfer) {
@@ -247,4 +245,55 @@ export async function GetStripeDashboardLink() {
   );
 
   return redirect(loginLink.url);
+}
+
+export async function UpdateProduct(prevState: State | undefined, formData: FormData) {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  const productId = formData.get("productId") as string;
+  if (!productId) {
+    return { status: "error", message: "Product ID is missing." } satisfies State;
+  }
+
+  // Confirm ownership before update.
+  const existing = await prisma.product.findUnique({
+    where: { id: productId },
+    select: { userId: true },
+  });
+
+  if (!existing || existing.userId !== user.id) {
+    return { status: "error", message: "Product not found or access denied." } satisfies State;
+  }
+
+  const validateFields = updateProductSchema.safeParse(getUpdateProductFormValues(formData));
+
+  if (!validateFields.success) {
+    return {
+      status: "error",
+      errors: z.flattenError(validateFields.error).fieldErrors,
+      message: "Oops, I think there is a mistake with your inputs.",
+    } satisfies State;
+  }
+
+  await prisma.product.update({
+    where: { id: productId },
+    data: {
+      name: validateFields.data.name,
+      Category: validateFields.data.category as CategoryTypes,
+      smallDescription: validateFields.data.smallDescription,
+      price: validateFields.data.price,
+      images: validateFields.data.images,
+      productFile: validateFields.data.productFile,
+      description: repairDescription(JSON.parse(validateFields.data.description)) as object,
+    },
+  });
+
+  revalidatePath(`/product/${productId}`);
+  revalidatePath("/my-products");
+  return redirect(`/product/${productId}`);
 }
