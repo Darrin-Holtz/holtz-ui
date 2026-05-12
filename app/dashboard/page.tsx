@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import prisma from "@/lib/db";
 import { unstable_noStore as noStore } from "next/cache";
 import { redirect } from "next/navigation";
 import { Card } from "@/components/ui/card";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+  robots: { index: false, follow: false },
+};
 
 async function getData(userId: string) {
   const [totalSales, revenueResult, recentSales, products] = await prisma.$transaction([

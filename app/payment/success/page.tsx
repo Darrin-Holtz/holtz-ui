@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Payment Successful",
+  robots: { index: false, follow: false },
+};
 
 export default function SuccessRoute() {
   return (

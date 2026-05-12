@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import {Card} from "@/components/ui/card";
 import { SellForm } from "../components/form/Sellform";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/db";
+
+export const metadata: Metadata = {
+  title: "List a Product",
+  robots: { index: false, follow: false },
+};
 import { unstable_noStore as noStore } from "next/cache";
 
 export const dynamic = "force-dynamic";

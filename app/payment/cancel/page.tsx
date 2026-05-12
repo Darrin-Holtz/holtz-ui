@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { XCircle } from "lucide-react";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Payment Cancelled",
+  robots: { index: false, follow: false },
+};
 
 export default function CancelRoute() {
   return (

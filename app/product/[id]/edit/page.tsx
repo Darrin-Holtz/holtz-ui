@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { notFound, redirect } from "next/navigation";
 import prisma from "@/lib/db";
 import { Card } from "@/components/ui/card";
 import { EditProductForm } from "@/app/components/form/EditProductForm";
+
+export const metadata: Metadata = {
+  title: "Edit Product",
+  robots: { index: false, follow: false },
+};
 import { unstable_noStore as noStore } from "next/cache";
 import { repairDescription } from "@/lib/repairDescription";
 

@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import { Card } from "@/components/ui/card";
 import prisma from "@/lib/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
 import { SettingsForm } from "../components/form/SettingsForm";
+
+export const metadata: Metadata = {
+  title: "Account Settings",
+  robots: { index: false, follow: false },
+};
 import { unstable_noStore as noStore } from "next/cache";
 
 export const dynamic = "force-dynamic";

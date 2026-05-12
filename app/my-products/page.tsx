@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import prisma from "@/lib/db";
 import { ProductCard } from "../components/ProductCard";
 import { unstable_noStore as noStore } from "next/cache";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "My Products",
+  robots: { index: false, follow: false },
+};
 import { ProductActions } from "../components/form/ProductActions";
 
 async function getData(userId: string) {

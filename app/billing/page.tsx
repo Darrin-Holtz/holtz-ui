@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   Card,
   CardContent,
@@ -8,6 +9,11 @@ import {
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import prisma from "@/lib/db";
 import { Button } from "@/components/ui/button";
+
+export const metadata: Metadata = {
+  title: "Billing",
+  robots: { index: false, follow: false },
+};
 import { CreateStripeAccountLink, GetStripeDashboardLink } from "../actions";
 import { SubmitButton } from "../components/SubmitButtons";
 import { unstable_noStore as noStore } from "next/cache";

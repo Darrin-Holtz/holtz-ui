@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import prisma from "@/lib/db";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+
+export const metadata: Metadata = {
+  title: "Stripe Account Connected",
+  robots: { index: false, follow: false },
+};
 import { Check } from "lucide-react";
 import Link from "next/link";
 
