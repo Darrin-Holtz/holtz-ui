@@ -25,6 +25,14 @@ export async function proxy(request: NextRequest) {
         "/api/stripe/connect",
         "/api/stripe",
         "/api/stripe/*",
+        "/privacy",
+        "/terms",
+        "/refunds",
+        "/dmca",
+        "/search",
+        "/sitemap.xml",
+        "/robots.txt",
+        "/api/admin/scan-files",
       ],
     }
   )(request);

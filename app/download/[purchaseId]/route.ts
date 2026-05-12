@@ -3,20 +3,9 @@ import prisma from "@/lib/db";
 import { utapi } from "@/lib/utapi";
 import { createHash } from "crypto";
 import { redirect } from "next/navigation";
+import { downloadRatelimit } from "@/lib/ratelimit";
 
 export const dynamic = "force-dynamic";
-
-function getFilenameFromUrl(urlString: string) {
-  try {
-    const url = new URL(urlString);
-    const pathname = url.pathname;
-    const lastSegment = pathname.split("/").pop();
-    if (!lastSegment) return "download";
-    return decodeURIComponent(lastSegment);
-  } catch {
-    return "download";
-  }
-}
 
 function isAbsoluteUrl(value: string) {
   return value.startsWith("http://") || value.startsWith("https://");
@@ -37,7 +26,7 @@ function getRequestIp(request: Request) {
   return firstIp || null;
 }
 
-const defaultAllowedHosts = ["utfs.io", "uploadthing.com"];
+const defaultAllowedHosts = ["utfs.io", "uploadthing.com", "ufs.sh"];
 
 function getAllowedDownloadHosts() {
   const envHosts = process.env.ALLOWED_DOWNLOAD_HOSTS;
@@ -104,6 +93,20 @@ export async function GET(
       reason: "unauthenticated",
     });
     redirect("/api/auth/login");
+  }
+
+  // Rate limit by user ID — 20 requests per minute
+  const { success: rateLimitOk } = await downloadRatelimit.limit(user.id);
+  if (!rateLimitOk) {
+    await writeDownloadAuditLog({
+      purchaseId,
+      userId: user.id,
+      ipHash,
+      userAgent,
+      outcome: "BLOCKED",
+      reason: "rate_limited",
+    });
+    return new Response("Too many requests. Please wait a moment and try again.", { status: 429 });
   }
 
   const purchase = await prisma.purchase.findUnique({
@@ -177,23 +180,6 @@ export async function GET(
     return new Response("Blocked download source", { status: 403 });
   }
 
-  const upstream = await fetch(sourceUrl, {
-    method: "GET",
-    cache: "no-store",
-  });
-
-  if (!upstream.ok || !upstream.body) {
-    await writeDownloadAuditLog({
-      purchaseId,
-      userId: user.id,
-      ipHash,
-      userAgent,
-      outcome: "ERROR",
-      reason: `upstream_${upstream.status}`,
-    });
-    return new Response("Unable to retrieve file", { status: 502 });
-  }
-
   await writeDownloadAuditLog({
     purchaseId,
     userId: user.id,
@@ -202,17 +188,5 @@ export async function GET(
     outcome: "SUCCESS",
   });
 
-  const filename = getFilenameFromUrl(sourceUrl);
-  const contentType =
-    upstream.headers.get("content-type") ?? "application/octet-stream";
-
-  return new Response(upstream.body, {
-    status: 200,
-    headers: {
-      "Content-Type": contentType,
-      "Content-Disposition": `attachment; filename="${filename}"`,
-      "Cache-Control": "private, no-store, max-age=0",
-      "X-Content-Type-Options": "nosniff",
-    },
-  });
+  return Response.redirect(sourceUrl, 302);
 }

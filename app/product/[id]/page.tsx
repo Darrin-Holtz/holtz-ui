@@ -6,6 +6,8 @@ import prisma from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import { unstable_noStore as noStore } from "next/cache";
 import { notFound } from "next/navigation";
+import Image from "next/image";
+import type { Metadata } from "next";
 
 import {
   Carousel,
@@ -15,14 +17,16 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { JSONContent } from "@tiptap/react";
-import Image from "next/image";
 import { BuyProduct } from "@/app/actions";
 import { repairDescription } from "@/lib/repairDescription";
+
+const APP_URL = "https://holtzdigitalui.com";
 
 async function getData(id: string) {
   const data = await prisma.product.findUnique({
     where: {
       id: id,
+      isActive: true,
     },
     select: {
       Category: true,
@@ -37,11 +41,44 @@ async function getData(id: string) {
         select: {
           profileImage: true,
           firstName: true,
+          lastName: true,
         },
       },
     },
   });
   return data;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const data = await getData(id);
+  if (!data) return {};
+
+  const productUrl = `${APP_URL}/product/${id}`;
+  const image = data.images[0] as string | undefined;
+
+  return {
+    title: data.name,
+    description: data.smallDescription,
+    alternates: { canonical: productUrl },
+    openGraph: {
+      type: "website",
+      url: productUrl,
+      title: data.name,
+      description: data.smallDescription,
+      images: image ? [{ url: image, width: 1200, height: 630, alt: data.name }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: data.name,
+      description: data.smallDescription,
+      images: image ? [image] : undefined,
+    },
+  };
 }
 
 export default async function ProductPage({
@@ -62,8 +99,37 @@ export default async function ProductPage({
     notFound();
   }
 
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: data.name,
+    description: data.smallDescription,
+    image: data.images as string[],
+    url: `${APP_URL}/product/${id}`,
+    offers: {
+      "@type": "Offer",
+      price: data.price.toNumber().toFixed(2),
+      priceCurrency: "USD",
+      availability: "https://schema.org/InStock",
+      seller: {
+        "@type": "Organization",
+        name: "HoltzDigitalUI",
+      },
+    },
+    ...(data.User && {
+      brand: {
+        "@type": "Person",
+        name: `${data.User.firstName} ${data.User.lastName ?? ""}`.trim(),
+      },
+    }),
+  };
+
   return (
     <section className="mx-auto px-4 lg:mt-10 w-full max-w-7xl lg:px-8 lg:grid lg:grid-rows-1 lg:grid-cols-7 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       <ProductPurchaseToast />
       <ProductAutoCheckout formId="product-buy-form" />
       <Carousel className=" lg:row-end-1 lg:col-span-4">
@@ -73,7 +139,7 @@ export default async function ProductPage({
               <div className="aspect-w-4 aspect-h-3 rounded-lg bg-gray-100 overflow-hidden">
                 <Image
                   src={item as string}
-                  alt="yoo"
+                  alt={`${data.name} screenshot ${index + 1}`}
                   fill
                   sizes="(max-width: 1024px) 100vw, 57vw"
                   priority={index === 0}
@@ -116,6 +182,24 @@ export default async function ProductPage({
             <h3 className="text-sm font-medium col-span-1">{data.Category}</h3>
           </div>
         </div>
+
+        {data.User && (
+          <div className="border-t border-gray-200 mt-10 pt-10">
+            <h3 className="text-sm font-medium text-muted-foreground mb-3">Seller</h3>
+            <div className="flex items-center gap-3">
+              <Image
+                src={data.User.profileImage}
+                alt={data.User.firstName}
+                width={40}
+                height={40}
+                className="rounded-full object-cover"
+              />
+              <span className="text-sm font-medium">
+                {data.User.firstName} {data.User.lastName}
+              </span>
+            </div>
+          </div>
+        )}
 
         <div className="border-t border-gray-200 mt-10"></div>
       </div>

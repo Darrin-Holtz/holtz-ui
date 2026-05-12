@@ -88,7 +88,7 @@ export default function GeneratorPage({
   const [testimonialsVariant, setTestimonialsVariant] = useState("grid");
   const [ctaVariant, setCtaVariant] = useState("centered");
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
-  const [brandName, setBrandName] = useState("HoltzUI");
+  const [brandName, setBrandName] = useState("HoltzDigitalUI");
   const [exportOpen, setExportOpen] = useState(false);
   const exportRef = useRef<HTMLDivElement>(null);
   const [darkPreview, setDarkPreview] = useState(false);
@@ -258,7 +258,7 @@ export default function GeneratorPage({
           <button
             onClick={() => {
               setTokens(structuredClone(defaultTokens));
-              setBrandName("HoltzUI");
+              setBrandName("HoltzDigitalUI");
               setSections({ navbar: true, hero: true, features: true, testimonials: true, pricing: true, cta: true });
               setHeroVariant("centered");
               setNavbarVariant("default");
@@ -379,7 +379,7 @@ export default function GeneratorPage({
                 value={brandName}
                 onChange={(e) => setBrandName(e.target.value)}
                 className="border bg-neutral-50 px-3 py-2 rounded-lg text-sm"
-                placeholder="HoltzUI"
+                placeholder="HoltzDigitalUI"
               />
             </div>
           </div>

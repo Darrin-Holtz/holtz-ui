@@ -8,7 +8,7 @@ interface NavbarProps {
 }
 
 /** Centered — logo top-left, links centered, no auth buttons */
-export function NavbarCentered({ tokens, brandName = "HoltzUI" }: NavbarProps) {
+export function NavbarCentered({ tokens, brandName = "HoltzDigitalUI" }: NavbarProps) {
   const classes = tokensToClasses(tokens);
   return (
     <nav
@@ -36,7 +36,7 @@ export function NavbarCentered({ tokens, brandName = "HoltzUI" }: NavbarProps) {
 }
 
 /** Minimal — brand left, single CTA right, no nav links */
-export function NavbarMinimal({ tokens, brandName = "HoltzUI" }: NavbarProps) {
+export function NavbarMinimal({ tokens, brandName = "HoltzDigitalUI" }: NavbarProps) {
   const classes = tokensToClasses(tokens);
   return (
     <nav

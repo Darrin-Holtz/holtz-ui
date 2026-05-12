@@ -1,17 +1,10 @@
 import ProductEmail from "@/app/components/ProductEmail";
 import prisma from "@/lib/db";
 import { stripe } from "@/lib/stripe";
-import { getAppUrl } from "@/lib/appUrl";
-
 import { headers } from "next/headers";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-
-function buildDownloadLink(purchaseId: string) {
-  const appUrl = getAppUrl();
-  return new URL(`/download/${purchaseId}`, appUrl).toString();
-}
 
 export async function POST(req: Request) {
   const body = await req.text();
@@ -83,33 +76,21 @@ export async function POST(req: Request) {
         update: {},
       });
 
-      const link = buildDownloadLink(purchase.id);
-
-      if (!/^https?:\/\//i.test(link)) {
-        console.error("Generated invalid download link", { link, purchaseId: purchase.id });
-        return new Response("invalid download link", { status: 500 });
-      }
-
-      if (process.env.NODE_ENV === "production" && link.includes("localhost")) {
-        console.error("Generated localhost download link in production", {
-          link,
-          purchaseId: purchase.id,
-        });
-        return new Response("invalid production download link", { status: 500 });
-      }
-
       const { error } = await resend.emails.send({
-        from: "HoltzUI <onboarding@resend.dev>",
+        from: "HoltzDigitalUI <onboarding@resend.dev>",
         to: [email],
-        subject: "Your Product from HoltzUI",
-        react: ProductEmail({
-          link,
-        }),
-        text: `Hi Friend,\n\nThank you for buying your product at HoltzUI.\n\nDownload your purchase:\n${link}\n\nBest,\nHoltzUI Team`,
+        subject: "Your Product from HoltzDigitalUI",
+        react: ProductEmail(),
+        text: `Hi Friend,\n\nThank you for buying your product at HoltzDigitalUI!\n\nYour purchase is ready to download. Click your avatar in the top-right corner of HoltzDigitalUI and select My Purchases from the dropdown menu.\n\nBest,\nHoltzDigitalUI Team`,
       });
 
       if (error) {
-        console.error("Failed sending product email", error);
+        console.error("Failed sending product email — purchaseId:", purchase.id, error);
+      } else {
+        await prisma.purchase.update({
+          where: { id: purchase.id },
+          data: { emailSent: true },
+        });
       }
 
       break;

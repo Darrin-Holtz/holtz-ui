@@ -11,10 +11,13 @@ import {
 import { repairDescription } from "@/lib/repairDescription";
 import { getAppUrl } from "@/lib/appUrl";
 import prisma from "@/lib/db";
+import { utapi } from "@/lib/utapi";
 import { type CategoryTypes } from "@/lib/generated/prisma/enums";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { stripe } from "@/lib/stripe";
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export type State = {
   status: "error" | "success" | undefined;
@@ -44,18 +47,31 @@ export async function SellProduct(prevState: State | undefined, formData: FormDa
     return state;
   }
 
-  const data = await prisma.product.create({
-    data: {
-      name: validateFields.data.name,
-      Category: validateFields.data.category as CategoryTypes,
-      smallDescription: validateFields.data.smallDescription,
-      price: validateFields.data.price,
-      images: validateFields.data.images,
-      productFile: validateFields.data.productFile,
-      userId: user.id,
-      description: JSON.parse(validateFields.data.description),
-    },
-  });
+  let data;
+  try {
+    data = await prisma.product.create({
+      data: {
+        name: validateFields.data.name,
+        Category: validateFields.data.category as CategoryTypes,
+        smallDescription: validateFields.data.smallDescription,
+        price: validateFields.data.price,
+        images: validateFields.data.images,
+        productFile: validateFields.data.productFile,
+        userId: user.id,
+        description: JSON.parse(validateFields.data.description),
+      },
+    });
+  } catch {
+    // Clean up uploaded file to avoid orphaned storage
+    const fileKey = validateFields.data.productFile;
+    if (fileKey && !fileKey.startsWith("http")) {
+      try { await utapi.deleteFiles(fileKey); } catch {}
+    }
+    return {
+      status: "error",
+      message: "Failed to save product. Please try again.",
+    } satisfies State;
+  }
 
   return redirect(`/product/${data.id}`);
   
@@ -110,13 +126,16 @@ export async function BuyProduct(formData: FormData) {
   const user = await getUser();
 
   if (!user) {
-    const returnTo = `/product/${id}?checkout=1`;
+    // Validate id is a UUID to prevent open redirect
+    const safeId = UUID_RE.test(id ?? "") ? id : "";
+    const returnTo = safeId ? `/product/${safeId}?checkout=1` : "/";
     redirect(`/api/auth/login?post_login_redirect_url=${encodeURIComponent(returnTo)}`);
   }
 
   const data = await prisma.product.findUnique({
     where: {
       id: id,
+      isActive: true,
     },
     select: {
       userId: true,
@@ -169,7 +188,7 @@ export async function BuyProduct(formData: FormData) {
       productId: id,
       buyerId: user.id,
     },
-    customer_email: user.email ?? undefined,
+    customer_email: undefined,
     success_url: `${getAppUrl()}/payment/success`,
     cancel_url: `${getAppUrl()}/payment/cancel`,
   };
@@ -206,16 +225,31 @@ export async function CreateStripeAccountLink() {
     },
   });
 
+  let connectedAccountId = data?.connectedAccountId as string;
+
+  // Verify the account still exists in Stripe; re-create if deleted
+  try {
+    await stripe.accounts.retrieve(connectedAccountId);
+  } catch {
+    const newAccount = await stripe.accounts.create({
+      email: user.email as string,
+      controller: {
+        losses: { payments: "application" },
+        fees: { payer: "application" },
+        stripe_dashboard: { type: "express" },
+      },
+    });
+    connectedAccountId = newAccount.id;
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { connectedAccountId, stripeConnectedLinked: false },
+    });
+  }
+
   const accountLink = await stripe.accountLinks.create({
-    account: data?.connectedAccountId as string,
-    refresh_url:
-      process.env.NODE_ENV === "development"
-        ? `https://musical-space-guacamole-jjrjxgp465w4h5vq6-3000.app.github.dev/billing`
-        : `https://holtz-ui.vercel.app/billing`,
-    return_url:
-      process.env.NODE_ENV === "development"
-        ? `https://musical-space-guacamole-jjrjxgp465w4h5vq6-3000.app.github.dev/return/${data?.connectedAccountId}`
-        : `https://holtz-ui.vercel.app/return/${data?.connectedAccountId}`,
+    account: connectedAccountId,
+    refresh_url: `${getAppUrl()}/billing`,
+    return_url: `${getAppUrl()}/return/${connectedAccountId}`,
     type: "account_onboarding",
   });
 
@@ -296,4 +330,65 @@ export async function UpdateProduct(prevState: State | undefined, formData: Form
   revalidatePath(`/product/${productId}`);
   revalidatePath("/my-products");
   return redirect(`/product/${productId}`);
+}
+
+export async function DeleteProduct(productId: string) {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  if (!user) throw new Error("Unauthorized");
+
+  const product = await prisma.product.findUnique({
+    where: { id: productId },
+    select: {
+      userId: true,
+      productFile: true,
+      _count: { select: { Purchase: true } },
+    },
+  });
+
+  if (!product || product.userId !== user.id) {
+    return { status: "error", message: "Product not found or access denied." } satisfies State;
+  }
+
+  if (product._count.Purchase > 0) {
+    // Soft delete — preserve download access for existing buyers
+    await prisma.product.update({
+      where: { id: productId },
+      data: { isActive: false },
+    });
+  } else {
+    // Hard delete — no purchases, safe to remove entirely
+    await prisma.product.delete({ where: { id: productId } });
+    if (product.productFile && !product.productFile.startsWith("http")) {
+      try { await utapi.deleteFiles(product.productFile); } catch {}
+    }
+  }
+
+  revalidatePath("/my-products");
+  return { status: "success", message: "Product deleted." } satisfies State;
+}
+
+export async function ToggleProductVisibility(productId: string, isActive: boolean) {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  if (!user) throw new Error("Unauthorized");
+
+  const product = await prisma.product.findUnique({
+    where: { id: productId },
+    select: { userId: true },
+  });
+
+  if (!product || product.userId !== user.id) {
+    return { status: "error", message: "Product not found or access denied." } satisfies State;
+  }
+
+  await prisma.product.update({
+    where: { id: productId },
+    data: { isActive },
+  });
+
+  revalidatePath("/my-products");
+  return { status: "success" } satisfies State;
 }

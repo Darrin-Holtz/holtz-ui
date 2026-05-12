@@ -1,9 +1,31 @@
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import prisma from "@/lib/db";
+import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import Link from "next/link";
 
-export default function ReturnUrlStripe() {
+export default async function ReturnUrlStripe({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  if (!user) redirect("/api/auth/login");
+
+  const userRecord = await prisma.user.findUnique({
+    where: { id: user.id },
+    select: { connectedAccountId: true },
+  });
+
+  if (!userRecord || userRecord.connectedAccountId !== id) {
+    redirect("/billing");
+  }
+
   return (
     <section className="w-full min-h-[80vh] flex items-center justify-center">
       <Card className="w-[350px]">

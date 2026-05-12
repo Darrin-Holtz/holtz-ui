@@ -1,8 +1,6 @@
 import type { CSSProperties } from "react";
 
-export default function ProductEmail({ link }: { link: string }) {
-  const safeLink = link?.trim();
-
+export default function ProductEmail() {
   return (
     <html>
       <head>
@@ -11,20 +9,15 @@ export default function ProductEmail({ link }: { link: string }) {
       <body style={bodyStyle}>
         <div style={containerStyle}>
           <p style={headingStyle}>Hi Friend,</p>
-          <p style={paragraphStyle}>Thank you for buying your product at HoltzUI</p>
-          <div style={buttonWrapStyle}>
-            <a href={safeLink} style={buttonStyle} target="_blank" rel="noopener noreferrer">
-              Your Download Link
-            </a>
-          </div>
+          <p style={paragraphStyle}>Thank you for buying your product at HoltzDigitalUI!</p>
           <p style={paragraphStyle}>
-            If the button does not work, copy and paste this URL into your browser:
+            Your purchase is ready to download. Click your avatar in the top-right
+            corner of HoltzDigitalUI and select <strong>My Purchases</strong> from the dropdown menu.
           </p>
-          <p style={urlStyle}>{safeLink}</p>
           <p style={paragraphStyle}>
             Best,
             <br />
-            HoltzUI Team
+            HoltzDigitalUI Team
           </p>
         </div>
       </body>
@@ -58,24 +51,4 @@ const paragraphStyle: CSSProperties = {
   margin: "0 0 16px",
 };
 
-const buttonWrapStyle: CSSProperties = {
-  margin: "28px 0",
-};
 
-const buttonStyle: CSSProperties = {
-  display: "inline-block",
-  backgroundColor: "#2563eb",
-  color: "#ffffff",
-  padding: "12px 20px",
-  borderRadius: "8px",
-  textDecoration: "none",
-  fontWeight: 600,
-};
-
-const urlStyle: CSSProperties = {
-  color: "#1d4ed8",
-  fontSize: "14px",
-  lineHeight: "20px",
-  margin: "0 0 16px",
-  wordBreak: "break-all",
-};

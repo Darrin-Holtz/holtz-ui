@@ -4,6 +4,7 @@ import { ProductCard } from "./ProductCard";
 
 async function getData() {
   const data = await prisma.product.findMany({
+    where: { isActive: true },
     select: {
       price: true,
       smallDescription: true,

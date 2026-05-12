@@ -14,6 +14,7 @@ async function getData({ category }: iAppProps) {
     case "icons": {
       const data = await prisma.product.findMany({
         where: {
+          isActive: true,
           Category: "icons",
         },
         select: {
@@ -34,6 +35,7 @@ async function getData({ category }: iAppProps) {
     }
     case "newest": {
       const data = await prisma.product.findMany({
+        where: { isActive: true },
         select: {
           price: true,
           name: true,
@@ -56,6 +58,7 @@ async function getData({ category }: iAppProps) {
     case "templates": {
       const data = await prisma.product.findMany({
         where: {
+          isActive: true,
           Category: "templates",
         },
         select: {
@@ -77,6 +80,7 @@ async function getData({ category }: iAppProps) {
     case "uikits": {
       const data = await prisma.product.findMany({
         where: {
+          isActive: true,
           Category: "uikits",
         },
         select: {

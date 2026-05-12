@@ -23,19 +23,16 @@ export async function POST(req: Request) {
   switch (event.type) {
     case "account.updated": {
       const account = event.data.object;
-
-      const data = await prisma.user.update({
-        where: {
-          connectedAccountId: account.id,
-        },
-        data: {
-          stripeConnectedLinked:
-            account.capabilities?.transfers === "pending" ||
-            account.capabilities?.transfers === "inactive"
-              ? false
-              : true,
-        },
-      });
+      try {
+        await prisma.user.update({
+          where: { connectedAccountId: account.id },
+          data: {
+            stripeConnectedLinked: account.capabilities?.transfers === "active",
+          },
+        });
+      } catch {
+        // Account not found in our DB — ignore
+      }
       break;
     }
     default: {

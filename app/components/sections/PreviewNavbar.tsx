@@ -7,7 +7,7 @@ interface PreviewNavbarProps {
   brandName?: string;
 }
 
-export function PreviewNavbar({ tokens, brandName = "HoltzUI" }: PreviewNavbarProps) {
+export function PreviewNavbar({ tokens, brandName = "HoltzDigitalUI" }: PreviewNavbarProps) {
   const classes = tokensToClasses(tokens);
 
   return (

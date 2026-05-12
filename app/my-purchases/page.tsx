@@ -88,12 +88,12 @@ export default async function MyPurchasesRoute() {
                     &middot; {amountFormatted}
                   </p>
                 </div>
-                <Link
+                <a
                   href={`/download/${purchase.id}`}
                   className="shrink-0 text-sm border rounded-lg px-4 py-2 hover:bg-neutral-50 transition-colors"
                 >
                   Download
-                </Link>
+                </a>
               </div>
             );
           })}

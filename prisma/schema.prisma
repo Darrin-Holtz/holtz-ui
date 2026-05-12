@@ -30,10 +30,14 @@ model Product {
   productFile      String
   Category         CategoryTypes
 
+  isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   User      User?      @relation(fields: [userId], references: [id])
   userId    String?
   Purchase  Purchase[]
+
+  @@index([userId])
+  @@index([Category, createdAt])
 }
 
 model Purchase {
@@ -43,6 +47,7 @@ model Purchase {
   productId       String
   amount          Int
   currency        String
+  emailSent       Boolean  @default(false)
   createdAt       DateTime @default(now())
 
   buyer   User    @relation(fields: [buyerId], references: [id])

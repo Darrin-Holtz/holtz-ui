@@ -3,6 +3,7 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { NextResponse } from "next/server";
 import { unstable_noStore as noStore } from "next/cache";
 import { stripe } from "@/lib/stripe";
+import { getAppUrl } from "@/lib/appUrl";
 
 export async function GET() {
   noStore();
@@ -48,9 +49,5 @@ export async function GET() {
     });
   }
 
-  return NextResponse.redirect(
-    process.env.NODE_ENV === "development"
-      ? "https://musical-space-guacamole-jjrjxgp465w4h5vq6-3000.app.github.dev"
-      : "https://holtz-ui.vercel.app/"
-  );
+  return NextResponse.redirect(getAppUrl());
 }
