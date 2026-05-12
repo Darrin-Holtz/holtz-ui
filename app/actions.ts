@@ -347,6 +347,7 @@ export async function UpdateProduct(prevState: State | undefined, formData: Form
     if (uniqueEmails.length > 0) {
       resend.emails.send({
         from: "HoltzDigitalUI <noreply@holtzdigitalui.com>",
+        replyTo: "support@holtzdigitalui.com",
         to: uniqueEmails,
         subject: `${existing.name} has been updated (v${newVersion})`,
         react: ProductUpdateEmail({ productName: existing.name, version: newVersion }),

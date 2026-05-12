@@ -220,9 +220,10 @@ export default function GeneratorPage({
             <h2 className="text-lg font-semibold">Sign in to continue</h2>
             <p className="mt-2 text-sm text-muted-foreground">
               {pendingActionLabel
-                ? `Please sign in or create an account to ${pendingActionLabel}.`
-                : "Please sign in or create an account to continue."}
+                ? `Please sign in or create a free account to ${pendingActionLabel}.`
+                : "Please sign in or create a free account to continue."}
             </p>
+            <p className="mt-1 text-xs text-muted-foreground">No credit card required.</p>
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <a
                 href={buildAuthUrl("/api/auth/login")}
@@ -294,7 +295,7 @@ export default function GeneratorPage({
           </button>
           <div className="relative" ref={exportRef}>
             <button
-              onClick={() => withAuth("export component code", () => setExportOpen((o) => !o))}
+              onClick={() => setExportOpen((o) => !o)}
               className="text-sm bg-foreground text-background px-3.5 py-1.5 rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center gap-1.5"
             >
               Export Component
@@ -310,12 +311,10 @@ export default function GeneratorPage({
                   return (
                     <button
                       key={key}
-                      onClick={() =>
-                        withAuth("copy generated code", () => {
+                      onClick={() => {
                           copyText(copy, key);
                           setExportOpen(false);
-                        })
-                      }
+                        }}
                       className={`w-full text-left text-sm px-4 py-2 hover:bg-neutral-50 transition-colors flex justify-between items-center ${isCss ? "border-b font-medium" : ""}`}
                     >
                       {label}

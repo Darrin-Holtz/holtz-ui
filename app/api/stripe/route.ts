@@ -78,6 +78,7 @@ export async function POST(req: Request) {
 
       const { error } = await resend.emails.send({
         from: "HoltzDigitalUI <noreply@holtzdigitalui.com>",
+        replyTo: "support@holtzdigitalui.com",
         to: [email],
         subject: "Your Product from HoltzDigitalUI",
         react: ProductEmail(),
