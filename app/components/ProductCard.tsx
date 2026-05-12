@@ -33,7 +33,7 @@ export function ProductCard({
             <CarouselItem key={index}>
               <div className="relative h-[230px]">
                 <Image
-                  alt="Product image"
+                  alt={`${name} preview ${index + 1}`}
                   src={item}
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -60,7 +60,7 @@ export function ProductCard({
       </p>
 
       <Button asChild className="w-full mt-5">
-        <Link href={`/product/${id}`}>Learn More!</Link>
+        <Link href={`/product/${id}`}>View {name}</Link>
       </Button>
     </div>
   );

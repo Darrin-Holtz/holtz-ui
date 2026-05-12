@@ -46,7 +46,7 @@ export async function Navbar() {
             }
           />
         ) : (
-          <div className="flex items-center gap-x-2">
+          <div className="hidden md:flex items-center gap-x-2">
             <Button asChild>
               <LoginLink>Login</LoginLink>
             </Button>
@@ -56,7 +56,7 @@ export async function Navbar() {
           </div>
         )}
 
-        <div className="md:hidden">
+        <div className="block md:hidden">
           <MobileMenu />
         </div>
       </div>

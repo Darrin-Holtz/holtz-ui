@@ -88,15 +88,17 @@ export default function RootLayout({
         <Navbar />
         {children}
         <footer className="border-t mt-auto py-8">
-          <div className="max-w-7xl mx-auto px-4 md:px-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-            <p>© {new Date().getFullYear()} HoltzDigitalUI — a product of HoltzDigital. All rights reserved.</p>
-            <div className="flex flex-wrap justify-center sm:justify-end gap-4">
-              <a href="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</a>
-              <a href="/terms" className="hover:text-foreground transition-colors">Terms of Service</a>
-              <a href="/refunds" className="hover:text-foreground transition-colors">Refund Policy</a>
-              <a href="/dmca" className="hover:text-foreground transition-colors">DMCA</a>
-              <a href="mailto:support@holtzdigitalui.com" className="hover:text-foreground transition-colors">support@holtzdigitalui.com</a>
+          <div className="max-w-7xl mx-auto px-4 md:px-8 flex flex-col items-center gap-4 text-sm text-muted-foreground">
+            <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-4">
+              <p>© {new Date().getFullYear()} HoltzDigitalUI — a product of <a href="https://holtzdigital.com" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">HoltzDigital</a>. All rights reserved.</p>
+              <div className="flex flex-wrap justify-center sm:justify-end gap-4">
+                <a href="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</a>
+                <a href="/terms" className="hover:text-foreground transition-colors">Terms of Service</a>
+                <a href="/refunds" className="hover:text-foreground transition-colors">Refund Policy</a>
+                <a href="/dmca" className="hover:text-foreground transition-colors">DMCA</a>
+              </div>
             </div>
+            <a href="mailto:support@holtzdigitalui.com" className="hover:text-foreground transition-colors">support@holtzdigitalui.com</a>
           </div>
         </footer>
         <Toaster richColors theme="light" closeButton />
