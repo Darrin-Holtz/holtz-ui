@@ -8,6 +8,10 @@ import {
   updateProductSchema,
   userSettingsSchema,
 } from "@/lib/productSchema";
+import { Resend } from "resend";
+import ProductUpdateEmail from "@/emails/ProductUpdateEmail";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 import { repairDescription } from "@/lib/repairDescription";
 import { getAppUrl } from "@/lib/appUrl";
 import prisma from "@/lib/db";
@@ -297,7 +301,7 @@ export async function UpdateProduct(prevState: State | undefined, formData: Form
   // Confirm ownership before update.
   const existing = await prisma.product.findUnique({
     where: { id: productId },
-    select: { userId: true },
+    select: { userId: true, productFile: true, version: true, name: true },
   });
 
   if (!existing || existing.userId !== user.id) {
@@ -314,6 +318,9 @@ export async function UpdateProduct(prevState: State | undefined, formData: Form
     } satisfies State;
   }
 
+  const fileChanged = validateFields.data.productFile !== existing.productFile;
+  const newVersion = fileChanged ? existing.version + 1 : existing.version;
+
   await prisma.product.update({
     where: { id: productId },
     data: {
@@ -324,8 +331,29 @@ export async function UpdateProduct(prevState: State | undefined, formData: Form
       images: validateFields.data.images,
       productFile: validateFields.data.productFile,
       description: repairDescription(JSON.parse(validateFields.data.description)) as object,
+      version: newVersion,
     },
   });
+
+  // Email all buyers when the product file is replaced.
+  if (fileChanged) {
+    const buyers = await prisma.purchase.findMany({
+      where: { productId },
+      select: { buyer: { select: { email: true } } },
+    });
+
+    const uniqueEmails = [...new Set(buyers.map((b) => b.buyer.email))];
+
+    if (uniqueEmails.length > 0) {
+      resend.emails.send({
+        from: "HoltzDigitalUI <noreply@holtzdigitalui.com>",
+        to: uniqueEmails,
+        subject: `${existing.name} has been updated (v${newVersion})`,
+        react: ProductUpdateEmail({ productName: existing.name, version: newVersion }),
+        text: `${existing.name} has been updated to v${newVersion}.\n\nSign in to HoltzDigitalUI and visit My Purchases to download the latest version:\nhttps://holtzdigitalui.com/my-purchases`,
+      }).catch((err) => console.error("Failed sending update emails:", err));
+    }
+  }
 
   revalidatePath(`/product/${productId}`);
   revalidatePath("/my-products");

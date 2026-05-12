@@ -36,7 +36,10 @@ async function getData(id: string) {
       images: true,
       price: true,
       createdAt: true,
+      updatedAt: true,
       id: true,
+      version: true,
+      _count: { select: { Purchase: true } },
       User: {
         select: {
           profileImage: true,
@@ -175,11 +178,38 @@ export default async function ProductPage({
               }).format(data?.createdAt)}
             </h3>
 
+            {data.version > 1 && (
+              <>
+                <h3 className="text-sm font-medium text-muted-foreground col-span-1">
+                  Updated:
+                </h3>
+                <h3 className="text-sm font-medium col-span-1">
+                  {new Intl.DateTimeFormat("en-US", {
+                    dateStyle: "long",
+                  }).format(data.updatedAt)}
+                </h3>
+              </>
+            )}
+
+            <h3 className="text-sm font-medium text-muted-foreground col-span-1">
+              Version:
+            </h3>
+            <h3 className="text-sm font-medium col-span-1">
+              v{data?.version}
+            </h3>
+
             <h3 className="text-sm font-medium text-muted-foreground col-span-1">
               Category:
             </h3>
 
             <h3 className="text-sm font-medium col-span-1">{data.Category}</h3>
+
+            <h3 className="text-sm font-medium text-muted-foreground col-span-1">
+              Sold:
+            </h3>
+            <h3 className="text-sm font-medium col-span-1">
+              {data._count.Purchase} {data._count.Purchase === 1 ? "copy" : "copies"}
+            </h3>
           </div>
         </div>
 

@@ -27,14 +27,14 @@ export function Testimonials({ tokens }: { tokens: DesignTokens }) {
 
   return (
     <section
-      className="py-24 px-6"
+      className="py-16 md:py-24 px-4 md:px-6"
       style={{
         backgroundColor: tokens.semantic.testimonials.background,
         color: tokens.semantic.testimonials.text,
       }}
     >
-      <div className="max-w-6xl mx-auto text-center mb-16">
-        <h2 className="text-3xl font-bold">Loved by developers &amp; creators</h2>
+      <div className="max-w-6xl mx-auto text-center mb-10 md:mb-16">
+        <h2 className="text-2xl md:text-3xl font-bold">Loved by developers &amp; creators</h2>
         <p className="mt-4 opacity-60">People use this to build faster and ship more</p>
       </div>
 

@@ -86,7 +86,9 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <Navbar />
-        {children}
+        <main className="flex-1">
+          {children}
+        </main>
         <footer className="border-t mt-auto py-8">
           <div className="max-w-7xl mx-auto px-4 md:px-8 flex flex-col items-center gap-4 text-sm text-muted-foreground">
             <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-4">

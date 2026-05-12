@@ -127,7 +127,7 @@ async function LoadRows({ category }: iAppProps) {
             href={data.link}
             className="text-sm hidden font-medium text-primary hover:text-primary/90 md:block"
           >
-            All Products <span>&rarr;</span>
+            All {data.title} <span>&rarr;</span>
           </Link>
         </div>
 
@@ -148,7 +148,7 @@ async function LoadRows({ category }: iAppProps) {
           href={data.link}
           className="text-sm hidden font-medium text-primary hover:text-primary/90 md:block"
         >
-          All Products <span>&rarr;</span>
+          All {data.title} <span>&rarr;</span>
         </Link>
       </div>
 

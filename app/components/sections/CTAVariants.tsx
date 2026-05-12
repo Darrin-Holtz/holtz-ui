@@ -16,22 +16,22 @@ export function CTASplit({
 }: CTAVariantProps) {
   return (
     <section
-      className="py-24 px-6"
+      className="py-16 md:py-24 px-4 md:px-6"
       style={{
         backgroundColor: tokens.semantic.cta.background,
         color: tokens.semantic.cta.text,
       }}
     >
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
         <div className="flex-1">
-          <h2 className="text-3xl font-bold mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">
             {heading}
           </h2>
           <p className="opacity-80 max-w-md leading-relaxed">
             {subheading}
           </p>
         </div>
-        <div className="flex flex-col gap-3 items-start md:items-end flex-shrink-0">
+        <div className="flex flex-col gap-3 items-start md:items-end flex-shrink-0 w-full md:w-auto">
           <button
             className="px-8 py-3 font-medium hover:opacity-90 transition rounded-[var(--radius)]"
             style={{
@@ -56,7 +56,7 @@ export function CTABanner({
 }: CTAVariantProps) {
   return (
     <section
-      className="py-6 px-6"
+      className="py-6 px-4 md:px-6"
       style={{
         backgroundColor: tokens.semantic.cta.background,
         color: tokens.semantic.cta.text,

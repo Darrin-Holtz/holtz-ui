@@ -44,11 +44,11 @@ export function FeaturesIcons({ tokens }: FeaturesProps) {
 
   return (
     <section
-      className="py-24 px-6"
+      className="py-16 md:py-24 px-4 md:px-6"
       style={{ backgroundColor: tokens.semantic.features.background, color: tokens.semantic.features.text }}
     >
-      <div className="max-w-6xl mx-auto text-center mb-16">
-        <h2 className="text-3xl font-bold">Built for speed. Designed for scale.</h2>
+      <div className="max-w-6xl mx-auto text-center mb-10 md:mb-16">
+        <h2 className="text-2xl md:text-3xl font-bold">Built for speed. Designed for scale.</h2>
         <p className="mt-4 opacity-60 max-w-xl mx-auto">
           Everything your team needs to ship polished UIs without starting from scratch.
         </p>
@@ -126,21 +126,21 @@ export function FeaturesAlternating({ tokens }: FeaturesProps) {
 
   return (
     <section
-      className="py-24 px-6"
+      className="py-16 md:py-24 px-4 md:px-6"
       style={{ backgroundColor: tokens.semantic.features.background, color: tokens.semantic.features.text }}
     >
-      <div className="max-w-5xl mx-auto text-center mb-20">
-        <h2 className="text-3xl font-bold">How it works</h2>
+      <div className="max-w-5xl mx-auto text-center mb-12 md:mb-20">
+        <h2 className="text-2xl md:text-3xl font-bold">How it works</h2>
         <p className="mt-4 opacity-60 max-w-xl mx-auto">
           A simple three-step process from idea to production-ready UI.
         </p>
       </div>
 
-      <div className="max-w-5xl mx-auto flex flex-col gap-20">
+      <div className="max-w-5xl mx-auto flex flex-col gap-12 md:gap-20">
         {alternatingSections.map((item, i) => (
           <div
             key={item.badge}
-            className={`flex flex-col md:flex-row items-center gap-12 ${
+            className={`flex flex-col md:flex-row items-center gap-8 md:gap-12 ${
               i % 2 === 1 ? "md:flex-row-reverse" : ""
             }`}
           >

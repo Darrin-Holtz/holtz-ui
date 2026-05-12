@@ -15,14 +15,14 @@ export function CTA({
 }: CTAProps) {
   return (
     <section
-      className="py-24 px-6"
+      className="py-16 md:py-24 px-4 md:px-6"
       style={{
         backgroundColor: tokens.semantic.cta.background,
         color: tokens.semantic.cta.text,
       }}
     >
       <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl font-bold mb-4">
+        <h2 className="text-2xl md:text-3xl font-bold mb-4">
           {heading}
         </h2>
         <p className="mb-8 opacity-80">

@@ -21,17 +21,17 @@ export function HeroSplit({
 
   return (
     <section
-      className={`${classes.heroSection} py-24 px-6`}
+      className={`${classes.heroSection} py-16 md:py-24 px-4 md:px-6`}
       style={{ backgroundColor: tokens.semantic.hero.background, color: tokens.semantic.hero.text }}
     >
-      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 items-center">
 
         {/* Left */}
         <div>
-          <h1 className="text-5xl font-bold leading-tight tracking-tight mb-6">
+          <h1 className="text-3xl md:text-5xl font-bold leading-tight tracking-tight mb-6">
             {resolvedHeadline}
           </h1>
-          <p className="text-xl mb-8" style={{ opacity: 0.7 }}>
+          <p className="text-base md:text-xl mb-8" style={{ opacity: 0.7 }}>
             {subheadline}
           </p>
           <button
@@ -42,7 +42,7 @@ export function HeroSplit({
         </div>
 
         {/* Right — placeholder image block */}
-        <div className="w-full h-80 bg-muted rounded-[var(--radius)]" />
+        <div className="w-full h-64 md:h-80 bg-muted rounded-[var(--radius)]" />
       </div>
     </section>
   );

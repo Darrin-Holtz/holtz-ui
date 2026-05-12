@@ -10,11 +10,11 @@ export function Features({ tokens }: FeaturesProps) {
 
   return (
     <section
-      className="py-24 px-6"
+      className="py-16 md:py-24 px-4 md:px-6"
       style={{ backgroundColor: tokens.semantic.features.background, color: tokens.semantic.features.text }}
     >
-      <div className="max-w-6xl mx-auto text-center mb-16">
-        <h2 className="text-3xl font-bold">
+      <div className="max-w-6xl mx-auto text-center mb-10 md:mb-16">
+        <h2 className="text-2xl md:text-3xl font-bold">
           Everything you need to build faster
         </h2>
         <p className="text-muted-foreground mt-4">

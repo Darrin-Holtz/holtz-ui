@@ -34,7 +34,7 @@ export async function NewestProducts() {
           href="/products/all"
           className="text-sm hidden font-medium text-primary hover:text-primary/90 md:block"
         >
-          All Products <span>&rarr;</span>
+          All Newest Products <span>&rarr;</span>
         </Link>
       </div>
 

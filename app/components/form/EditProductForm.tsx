@@ -30,6 +30,7 @@ export type EditProductData = {
   images: string[];
   productFile: string;
   Category: CategoryTypes;
+  version: number;
 };
 
 const initialState: State = { status: undefined, message: "" };
@@ -74,8 +75,15 @@ export function EditProductForm({ product }: { product: EditProductData }) {
       <input type="hidden" name="productFile" value={productFile} />
 
       <CardHeader>
-        <CardTitle>Edit Product</CardTitle>
-        <CardDescription>Update your product details below.</CardDescription>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle>Edit Product</CardTitle>
+            <CardDescription>Update your product details below.</CardDescription>
+          </div>
+          <span className="inline-flex items-center rounded-md bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary ring-1 ring-inset ring-primary/10">
+            v{product.version}
+          </span>
+        </div>
       </CardHeader>
 
       <CardContent className="mt-5 flex flex-col gap-y-10">

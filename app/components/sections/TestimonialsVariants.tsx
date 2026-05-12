@@ -47,27 +47,27 @@ export function TestimonialsFeatured({ tokens }: { tokens: DesignTokens }) {
 
   return (
     <section
-      className="py-24 px-6"
+      className="py-16 md:py-24 px-4 md:px-6"
       style={{
         backgroundColor: tokens.semantic.testimonials.background,
         color: tokens.semantic.testimonials.text,
       }}
     >
-      <div className="max-w-6xl mx-auto text-center mb-16">
-        <h2 className="text-3xl font-bold">What people are saying</h2>
+      <div className="max-w-6xl mx-auto text-center mb-10 md:mb-16">
+        <h2 className="text-2xl md:text-3xl font-bold">What people are saying</h2>
         <p className="mt-4 opacity-60">Join thousands of developers and designers who ship faster</p>
       </div>
 
       {/* Featured quote */}
       <div className="max-w-3xl mx-auto mb-12">
         <div
-          className="p-10 rounded-[var(--radius)] text-center flex flex-col items-center gap-6"
+          className="p-6 md:p-10 rounded-[var(--radius)] text-center flex flex-col items-center gap-6"
           style={{
             backgroundColor: tokens.colors.primary.DEFAULT,
             color: tokens.colors.primary.foreground,
           }}
         >
-          <p className="text-xl font-medium leading-relaxed">&ldquo;{featured.quote}&rdquo;</p>
+          <p className="text-lg md:text-xl font-medium leading-relaxed">&ldquo;{featured.quote}&rdquo;</p>
           <div className="flex flex-col items-center gap-1">
             <div
               className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold"
@@ -118,14 +118,14 @@ export function TestimonialsWall({ tokens }: { tokens: DesignTokens }) {
 
   return (
     <section
-      className="py-24 px-6"
+      className="py-16 md:py-24 px-4 md:px-6"
       style={{
         backgroundColor: tokens.semantic.testimonials.background,
         color: tokens.semantic.testimonials.text,
       }}
     >
-      <div className="max-w-6xl mx-auto text-center mb-16">
-        <h2 className="text-3xl font-bold">Trusted by builders everywhere</h2>
+      <div className="max-w-6xl mx-auto text-center mb-10 md:mb-16">
+        <h2 className="text-2xl md:text-3xl font-bold">Trusted by builders everywhere</h2>
         <p className="mt-4 opacity-60">Real feedback from real users</p>
       </div>
 

@@ -21,15 +21,15 @@ export function Hero({
 
   return (
     <section
-      className={`${classes.heroSection} w-full py-24 px-6`}
+      className={`${classes.heroSection} w-full py-16 md:py-24 px-4 md:px-6`}
     >
       <div className="max-w-4xl mx-auto flex flex-col items-center text-center gap-y-6">
         <h1
-          className="text-5xl font-bold leading-tight tracking-tight"
+          className="text-3xl md:text-5xl font-bold leading-tight tracking-tight"
         >
           {resolvedHeadline}
         </h1>
-        <p className="text-xl text-muted-foreground max-w-2xl">
+        <p className="text-base md:text-xl text-muted-foreground max-w-2xl">
           {subheadline}
         </p>
         <button

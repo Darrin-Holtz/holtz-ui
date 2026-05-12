@@ -16,19 +16,18 @@ export function PricingCompact({ tokens }: PricingProps) {
   const classes = tokensToClasses(tokens);
   return (
     <section
-      className={`${classes.pricingSection} py-24 px-6`}
+      className={`${classes.pricingSection} py-16 md:py-24 px-4 md:px-6`}
       style={{ backgroundColor: tokens.semantic.pricing.background, color: tokens.semantic.pricing.text }}
     >
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold">Simple, transparent pricing</h2>
+          <h2 className="text-2xl md:text-3xl font-bold">Simple, transparent pricing</h2>
           <p className="mt-4" style={{ opacity: 0.7 }}>Choose the plan that fits your needs</p>
         </div>
         <div className="flex flex-col divide-y divide-border rounded-[var(--radius)] overflow-hidden border border-border">
           {plans.map((plan) => (
-            <div
-              key={plan.name}
-              className="flex items-center justify-between px-6 py-5"
+            <div key={plan.name}
+              className="flex flex-col sm:flex-row sm:items-center justify-between px-6 py-5 gap-4"
               style={{ backgroundColor: tokens.colors.card.DEFAULT, color: tokens.colors.card.foreground }}
             >
               <div>
@@ -58,12 +57,12 @@ export function PricingFeatured({ tokens }: PricingProps) {
   const classes = tokensToClasses(tokens);
   return (
     <section
-      className={`${classes.pricingSection} py-24 px-6`}
+      className={`${classes.pricingSection} py-16 md:py-24 px-4 md:px-6`}
       style={{ backgroundColor: tokens.semantic.pricing.background, color: tokens.semantic.pricing.text }}
     >
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold">Simple, transparent pricing</h2>
+          <h2 className="text-2xl md:text-3xl font-bold">Simple, transparent pricing</h2>
           <p className="mt-4" style={{ opacity: 0.7 }}>Choose the plan that fits your needs</p>
         </div>
 
@@ -86,7 +85,7 @@ export function PricingFeatured({ tokens }: PricingProps) {
 
           {/* Pro — featured, taller */}
           <div
-            className="flex flex-col justify-between p-8 rounded-[var(--radius)] shadow-lg -mt-4 -mb-4"
+            className="flex flex-col justify-between p-8 rounded-[var(--radius)] shadow-lg md:-mt-4 md:-mb-4"
             style={{ backgroundColor: tokens.colors.primary.DEFAULT, color: tokens.colors.primary.foreground }}
           >
             <div>

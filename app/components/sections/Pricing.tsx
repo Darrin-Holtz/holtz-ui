@@ -6,11 +6,11 @@ export function Pricing({ tokens }: { tokens: DesignTokens }) {
 
   return (
     <section
-      className={`${classes.pricingSection} py-24 px-6`}
+      className={`${classes.pricingSection} py-16 md:py-24 px-4 md:px-6`}
       style={{ backgroundColor: tokens.semantic.pricing.background, color: tokens.semantic.pricing.text }}
     >
       <div className="max-w-6xl mx-auto text-center mb-12">
-        <h2 className="text-3xl font-bold">Simple, transparent pricing</h2>
+        <h2 className="text-2xl md:text-3xl font-bold">Simple, transparent pricing</h2>
         <p className="text-muted-foreground mt-4">
           Choose the plan that fits your needs
         </p>
