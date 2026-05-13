@@ -31,6 +31,7 @@ export type EditProductData = {
   productFile: string;
   Category: CategoryTypes;
   version: number;
+  demoUrl: string | null;
 };
 
 const initialState: State = { status: undefined, message: "" };
@@ -120,6 +121,22 @@ export function EditProductForm({ product }: { product: EditProductData }) {
           />
           {fieldErrors?.["price"]?.[0] && (
             <p className="text-sm text-destructive">{fieldErrors["price"][0]}</p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-y-2">
+          <Label>
+            Live Demo URL{" "}
+            <span className="text-muted-foreground font-normal">(optional)</span>
+          </Label>
+          <Input
+            type="url"
+            name="demoUrl"
+            defaultValue={product.demoUrl ?? ""}
+            placeholder="https://demo.yourdomain.com"
+          />
+          {fieldErrors?.["demoUrl"]?.[0] && (
+            <p className="text-sm text-destructive">{fieldErrors["demoUrl"][0]}</p>
           )}
         </div>
 

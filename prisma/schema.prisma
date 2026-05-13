@@ -30,6 +30,8 @@ model Product {
   productFile      String
   Category         CategoryTypes
 
+  demoUrl   String?
+
   version   Int      @default(1)
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())

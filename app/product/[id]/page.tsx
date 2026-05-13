@@ -40,6 +40,7 @@ async function getData(id: string) {
       id: true,
       version: true,
       _count: { select: { Purchase: true } },
+      demoUrl: true,
       User: {
         select: {
           profileImage: true,
@@ -166,6 +167,18 @@ export default async function ProductPage({
           <input type="hidden" name="id" value={data?.id} />
           <BuyButton price={data?.price.toString()} />
         </form>
+        {data.demoUrl && (
+          <a
+            href={data.demoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block mt-3"
+          >
+            <Button variant="outline" className="w-full">
+              View Live Demo
+            </Button>
+          </a>
+        )}
 
         <div className="border-t border-gray-200 mt-10 pt-10">
           <div className="grid grid-cols-2 w-full gap-y-3">

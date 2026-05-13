@@ -26,6 +26,7 @@ async function getData(productId: string, userId: string) {
       Category: true,
       userId: true,
       version: true,
+      demoUrl: true,
     },
   });
 
@@ -68,6 +69,7 @@ export default async function EditProductPage({
             productFile: product.productFile,
             Category: product.Category,
             version: product.version,
+            demoUrl: product.demoUrl ?? null,
           }}
         />
       </Card>

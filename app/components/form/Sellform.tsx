@@ -93,6 +93,21 @@ export function SellForm() {
             </div>
 
             <div className="flex flex-col gap-y-2">
+              <Label>
+                Live Demo URL{" "}
+                <span className="text-muted-foreground font-normal">(optional)</span>
+              </Label>
+              <Input
+                type="url"
+                name="demoUrl"
+                placeholder="https://demo.yourdomain.com"
+              />
+              {fieldErrors?.["demoUrl"]?.[0] && (
+                <p className="text-sm text-destructive">{fieldErrors["demoUrl"][0]}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-y-2">
               <Label>Short Description</Label>
               <Textarea
                 name="smallDescription"

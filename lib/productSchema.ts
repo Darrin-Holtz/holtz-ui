@@ -41,6 +41,11 @@ export const productSchema = z.object({
       (value) => !looksLikeAbsoluteUrl(value),
       "Product file must be a secure upload key. Please re-upload your file."
     ),
+  demoUrl: z
+    .string()
+    .url({ message: "Please enter a valid URL" })
+    .or(z.literal(""))
+    .optional(),
 });
 
 // For edits the product file may be kept unchanged, so we allow an existing key.
@@ -92,5 +97,6 @@ export function getProductFormValues(formData: FormData) {
     description: formData.get("description"),
     images,
     productFile: formData.get("productFile"),
+    demoUrl: (formData.get("demoUrl") as string) ?? "",
   };
 }
