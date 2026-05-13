@@ -1,27 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Monitor } from "lucide-react";
 
-const MIN_WIDTH = 1024;
-
 export function DesktopGate({ children }: { children: React.ReactNode }) {
-  const [isWide, setIsWide] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    const mq = window.matchMedia(`(min-width: ${MIN_WIDTH}px)`);
-    setIsWide(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsWide(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
-
-  // Avoid flash — render nothing until we know the screen size
-  if (isWide === null) return null;
-
-  if (!isWide) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[70vh] px-6 text-center gap-6">
+  return (
+    <>
+      {/* Mobile/tablet: show "desktop required" message */}
+      <div className="flex lg:hidden flex-col items-center justify-center min-h-[70vh] px-6 text-center gap-6">
         <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
           <Monitor className="w-8 h-8 text-primary" />
         </div>
@@ -35,8 +20,11 @@ export function DesktopGate({ children }: { children: React.ReactNode }) {
           </p>
         </div>
       </div>
-    );
-  }
 
-  return <>{children}</>;
+      {/* Desktop: show generator */}
+      <div className="hidden lg:contents">
+        {children}
+      </div>
+    </>
+  );
 }
